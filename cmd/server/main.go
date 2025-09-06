@@ -4,12 +4,18 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/joho/godotenv"
 	"secop-blockchain/internal/config"
 	"secop-blockchain/internal/handler"
 	"secop-blockchain/internal/service"
 )
 
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Warning: .env file not found or could not be loaded: %v", err)
+	}
+	
 	// Load configuration
 	cfg := config.Load()
 	

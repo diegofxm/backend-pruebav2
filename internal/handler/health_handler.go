@@ -96,15 +96,25 @@ func (h *HealthHandler) Health(c *gin.Context) {
 // Stats returns system statistics
 func (h *HealthHandler) Stats(c *gin.Context) {
 	stats := map[string]interface{}{
+		"node_id":            h.services.Config.P2P.NodeID,
+		"entity_type":        h.services.Config.Entity.Type,
+		"entity_name":        h.services.Config.Entity.Name,
+		"entity_code":        h.services.Config.Entity.Code,
+		"entity_region":      h.services.Config.Entity.Region,
+		"entity_level":       h.services.Config.Entity.Level,
+		"entity_contact":     h.services.Config.Entity.ContactEmail,
+		"budget_authority":   h.services.Config.Entity.BudgetAuthority,
+		"max_contract_value": h.services.Config.Entity.MaxContractValue,
 		"blockchain_height":  h.services.Blockchain.GetBlockchainHeight(),
 		"total_contracts":    len(h.services.Blockchain.GetAllContracts()),
 		"total_peers":        len(h.services.P2P.GetPeers()),
-		"chain_valid":        h.services.Blockchain.IsChainValid(),
-		"is_synced":          h.services.P2P.IsSynced(),
-		"uptime":            config.GetColombianTime(),
+		"server_time":        config.GetColombianTime().Format("2006-01-02 15:04:05 MST"),
 	}
-	
-	c.JSON(http.StatusOK, stats)
+
+	c.JSON(200, gin.H{
+		"status": "healthy",
+		"stats":  stats,
+	})
 }
 
 // GetBlocks returns blockchain blocks

@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -36,7 +37,14 @@ type P2PConfig struct {
 
 // EntityConfig holds entity-specific configuration
 type EntityConfig struct {
-	Type string // DNP, MUNICIPALITY, DEPARTMENT, MINISTRY, CONTROL
+	Type                string // DNP, MUNICIPALITY, DEPARTMENT, MINISTRY, CONTROL, GOVERNMENT
+	Name                string // Nombre completo de la entidad
+	Code                string // Código de la entidad (ej: MHCP, DNP)
+	Region              string // Región o ciudad
+	Level               string // Nacional, Departamental, Municipal
+	ContactEmail        string // Email de contacto para contratos
+	BudgetAuthority     bool   // Si tiene autoridad presupuestal
+	MaxContractValue    int64  // Valor máximo de contrato que puede manejar
 }
 
 // ColombianTimezone represents Colombia's timezone (UTC-5)
@@ -80,7 +88,14 @@ func Load() *Config {
 			BootstrapPeers:       parseBootstrapPeers(getEnv("BOOTSTRAP_PEERS", "")),
 		},
 		Entity: EntityConfig{
-			Type: getEnv("ENTITY_TYPE", "GOVERNMENT"),
+			Type:                getEnv("ENTITY_TYPE", "GOVERNMENT"),
+			Name:                getEnv("ENTITY_NAME", ""),
+			Code:                getEnv("ENTITY_CODE", ""),
+			Region:              getEnv("ENTITY_REGION", ""),
+			Level:               getEnv("ENTITY_LEVEL", ""),
+			ContactEmail:        getEnv("ENTITY_CONTACT_EMAIL", ""),
+			BudgetAuthority:     getEnv("ENTITY_BUDGET_AUTHORITY", "false") == "true",
+			MaxContractValue:    parseInt64(getEnv("ENTITY_MAX_CONTRACT_VALUE", "0")),
 		},
 	}
 }
@@ -91,6 +106,13 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+// parseInt64 parses string to int64
+func parseInt64(s string) int64 {
+	var value int64
+	value, _ = strconv.ParseInt(s, 10, 64)
+	return value
 }
 
 // parseBootstrapPeers parses bootstrap peers from environment variable

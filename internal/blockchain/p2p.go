@@ -120,6 +120,7 @@ func (p2p *P2PNetwork) AddBootstrapPeer(id, address, entityType string) {
 	p2p.mutex.Lock()
 	defer p2p.mutex.Unlock()
 	
+	// Use the provided ID (which should be the actual NODE_ID)
 	p2p.Peers[id] = &Peer{
 		ID:       id,
 		Address:  address,
@@ -138,6 +139,7 @@ func (p2p *P2PNetwork) AddPeer(peerID, address, port string) error {
 		return fmt.Errorf("peer %s already exists", peerID)
 	}
 	
+	// Use the provided peerID (which should be the actual NODE_ID)
 	p2p.Peers[peerID] = &Peer{
 		ID:       peerID,
 		Address:  address,
