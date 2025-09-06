@@ -1,0 +1,34 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Development files
+.vscode
+.idea
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Go specific
+vendor/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment files (will be copied explicitly)
+# .env
